@@ -11,6 +11,7 @@ import android.content.Context
 import android.graphics.Paint
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.RectF
 
 val nodes : Int = 5
 val lines : Int = 2
@@ -31,3 +32,28 @@ fun Float.mirrorValue(a : Int, b : Int) : Float {
     return (1 - k) * a.inverse() + k * b.inverse()
 }
 fun Float.updateValue(dir : Float, a : Int, b : Int) : Float = mirrorValue(a, b) * dir * scGap
+
+fun Canvas.drawSemiCircle(i : Int, sc : Float, y: Float,  r : Float, paint : Paint) {
+    save()
+    translate(-2 * r + 2 * r * i, y)
+    drawArc(RectF(-r, -r, r, r), 90f, 90f + 180f * sc.divideScale(i, circles), false, paint)
+    restore()
+}
+
+fun Canvas.drawSqLine(i : Int, sc : Float, y : Float, size : Float, paint : Paint) {
+    save()
+    translate((1f - 2 * i) * size * sc.divideScale(i, lines), y)
+    drawLine(0f, 0f, size, 0f, paint)
+    restore()
+}
+
+fun Canvas.drawSCONode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    val gap : Float = Math.min(w, h) / strokeFactor
+    val size : Float = gap / sizeFactor
+    paint.color = foreColor
+    paint.strokeWidth = Math.min(w, h) / strokeFactor
+    paint.strokeCap = Paint.Cap.ROUND
+    
+}
