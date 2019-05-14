@@ -213,4 +213,13 @@ class SemiCirclesOverSqView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : SemiCirclesOverSqView {
+            var view : SemiCirclesOverSqView = SemiCirclesOverSqView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
