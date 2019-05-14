@@ -36,25 +36,39 @@ fun Float.updateValue(dir : Float, a : Int, b : Int) : Float = mirrorValue(a, b)
 fun Canvas.drawSemiCircle(i : Int, sc : Float, y: Float,  r : Float, paint : Paint) {
     save()
     translate(-2 * r + 2 * r * i, y)
-    drawArc(RectF(-r, -r, r, r), 90f, 90f + 180f * sc.divideScale(i, circles), false, paint)
+    drawArc(RectF(-r, -r, r, r), 180f, 180f * sc.divideScale(i, circles), false, paint)
     restore()
 }
 
 fun Canvas.drawSqLine(i : Int, sc : Float, y : Float, size : Float, paint : Paint) {
     save()
     translate((1f - 2 * i) * size * sc.divideScale(i, lines), y)
-    drawLine(0f, 0f, size, 0f, paint)
+    drawLine(-size / 2, 0f, size / 2, 0f, paint)
     restore()
 }
 
 fun Canvas.drawSCONode(i : Int, scale : Float, paint : Paint) {
     val w : Float = width.toFloat()
     val h : Float = height.toFloat()
-    val gap : Float = Math.min(w, h) / strokeFactor
+    val gap : Float = h / (nodes + 1)
     val size : Float = gap / sizeFactor
     paint.color = foreColor
     paint.strokeWidth = Math.min(w, h) / strokeFactor
     paint.strokeCap = Paint.Cap.ROUND
+    val sc1 : Float = scale.divideScale(0, 2)
+    val sc2 : Float = scale.divideScale(1, 2)
+    val rSize : Float = 2 * size / circles
+    paint.style = Paint.Style.STROKE
+    save()
+    translate(w / 2, gap * (i + 1))
+    drawRect(RectF(-rSize / 2, -rSize / 2, rSize / 2, rSize / 2), paint)
+    for (j in 0..(lines - 1)) {
+        drawSqLine(j, sc1, -rSize / 2, rSize, paint)
+    }
+    for (j in 0..(circles - 1)) {
+        drawSemiCircle(j, sc2, -rSize / 2, rSize / 2, paint)
+    }
+    restore()
 
 }
 
