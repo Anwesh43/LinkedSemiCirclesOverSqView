@@ -190,4 +190,26 @@ class SemiCirclesOverSqView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : SemiCirclesOverSqView) {
+
+        private val animator : Animator = Animator(view)
+        private val scos : SemiCirclesOverSq = SemiCirclesOverSq(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(backColor)
+            scos.draw(canvas, paint)
+            animator.animate {
+                scos.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            scos.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
